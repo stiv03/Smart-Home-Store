@@ -1,5 +1,8 @@
-package com.ninjas.gig;
+package com.ninjas.gig.controller;
 
+import com.ninjas.gig.ProductService;
+import com.ninjas.gig.repository.ProductsRepository;
+import com.ninjas.gig.model.Product;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

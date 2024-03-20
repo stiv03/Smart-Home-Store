@@ -1,12 +1,16 @@
-package com.ninjas.gig;
+package com.ninjas.gig.controller;
 
+import java.util.*;
+
+import com.ninjas.gig.model.UserAccount;
+import com.ninjas.gig.repository.UserRepository;
+import com.ninjas.gig.UserType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 
 @RestController
 public class UserController {
