@@ -1,0 +1,30 @@
+package com.ninjas.gig.service;
+
+import com.ninjas.gig.model.UserType;
+import com.ninjas.gig.model.UserAccount;
+import com.ninjas.gig.repository.UserRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+import java.util.List;
+
+@Service
+public class UserService {
+    private UserRepository repository;
+    public record UserRequest(String name,String email, String userName, String password, UserType userType) {}
+
+    public List<UserAccount> addUser(@RequestBody UserRequest userRequest) {
+        UserAccount newUser = new UserAccount();
+        newUser.setName(userRequest.name);
+        newUser.setEmail(userRequest.email);
+        newUser.setUserName(userRequest.userName);
+        newUser.setPassword(userRequest.password);
+        newUser.setUserType(userRequest.userType);
+        repository.save(newUser);
+        return repository.findAll();
+    }
+
+    public List<UserAccount> displayAll() {
+        return repository.findAll();
+    }
+
+}
