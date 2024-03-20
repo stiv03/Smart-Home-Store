@@ -9,12 +9,13 @@ import java.util.List;
 public class ProductsController {
 
     private ProductsRepository repository;
+    private ProductService productService;
 
     public ProductsController(ProductsRepository repository) {
         this.repository = repository;
     }
 
-   public record ProductRequest(String name, long price, String brand) {}
+   public record ProductRequest(String name, double price, String brand) {}
 
     @PostMapping("/")
     public ResponseEntity<?> addProduct(@RequestBody ProductRequest productRequest) {
@@ -23,7 +24,6 @@ public class ProductsController {
         return ResponseEntity.ok(repository.findAll());
     }
 
-
     @GetMapping("/")
     public List<Product> hello() {
         return repository.findAll();
@@ -31,4 +31,8 @@ public class ProductsController {
 
     // dependency injection and dependency inversion -> what is that and what it has to do with spring beans
 
+    @PutMapping("/products/{id}/price")
+    public Product updateProductPrice(@PathVariable Long id, @RequestParam double price) {
+        return productService.updatePrice(id, price);
+    }
 }

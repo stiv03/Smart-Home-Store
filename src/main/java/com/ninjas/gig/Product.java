@@ -10,16 +10,19 @@ public class Product {
     public Long id;
 
     public String name;
-    public long price;
+    public double price;
 
     public String brand;
 
     public Product() {}
 
-    public Product(String name, long price, String brand) {
+    public Product(String name, double price, String brand) {
         this.name = name;
         this.price = price;
         this.brand = brand;
     }
 
+    public void setPrice(double price) {
+        this.price = price;
+    }
 }
