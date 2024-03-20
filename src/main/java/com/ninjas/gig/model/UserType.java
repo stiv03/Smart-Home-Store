@@ -1,4 +1,4 @@
-package com.ninjas.gig;
+package com.ninjas.gig.model;
 
 public enum UserType {
     ADMIN,
