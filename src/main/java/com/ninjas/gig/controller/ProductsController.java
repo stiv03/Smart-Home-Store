@@ -36,4 +36,10 @@ public class ProductsController {
     public Product updateProductPrice(@PathVariable Long id, @RequestParam double price) {
         return productService.updatePrice(id, price);
     }
+
+    @GetMapping("/products/{category}")
+    public Product getSingleProduct(@PathVariable String categoryName){
+        return productService.getProductByCategoryName(categoryName);
+    }
+
 }
