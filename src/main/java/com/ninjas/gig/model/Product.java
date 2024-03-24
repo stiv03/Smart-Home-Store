@@ -13,16 +13,23 @@ public class Product {
     public double price;
     public String brand;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    public Category category;
+//    @ManyToOne
+//    @JoinColumn(name = "category_id")
+//    public Category category;
+    public String category;
 
     public Product() {}
 
-    public Product(String name, double price, String brand, Category category) {
-        this.name = name;
-        this.price = price;
-        this.brand = brand;
-        this.category = category;
-    }
+//    public Product(String name, double price, String brand, Category category) {
+//        this.name = name;
+//        this.price = price;
+//        this.brand = brand;
+//        this.category = category;
+//    }
+public Product(String name, double price, String brand, String category) {
+    this.name = name;
+    this.price = price;
+    this.brand = brand;
+    this.category = category;
+}
 }
