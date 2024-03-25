@@ -2,7 +2,7 @@ package com.ninjas.gig.service;
 
 import com.ninjas.gig.dto.UserLoginDTO;
 import com.ninjas.gig.dto.UserRegisterDTO;
-import com.ninjas.gig.model.UserAccount;
+import com.ninjas.gig.entity.UserAccount;
 import com.ninjas.gig.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

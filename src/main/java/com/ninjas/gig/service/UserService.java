@@ -1,8 +1,7 @@
 package com.ninjas.gig.service;
 
-import com.ninjas.gig.dto.UserRegisterDTO;
-import com.ninjas.gig.model.UserType;
-import com.ninjas.gig.model.UserAccount;
+import com.ninjas.gig.entity.UserType;
+import com.ninjas.gig.entity.UserAccount;
 import com.ninjas.gig.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

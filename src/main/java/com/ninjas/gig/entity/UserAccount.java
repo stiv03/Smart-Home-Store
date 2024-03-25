@@ -1,7 +1,6 @@
-package com.ninjas.gig.model;
+package com.ninjas.gig.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -20,7 +19,4 @@ public class UserAccount {
     private String password;
     @Enumerated(EnumType.STRING)
     private UserType userType;
-
-
-
 }

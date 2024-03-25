@@ -1,6 +1,6 @@
 package com.ninjas.gig.dto;
 
-import com.ninjas.gig.model.UserType;
+import com.ninjas.gig.entity.UserType;
 import lombok.Data;
 
 @Data

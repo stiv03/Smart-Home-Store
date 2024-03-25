@@ -1,7 +1,7 @@
 package com.ninjas.gig.security;
 
-import com.ninjas.gig.model.UserAccount;
-import com.ninjas.gig.model.UserType;
+import com.ninjas.gig.entity.UserAccount;
+import com.ninjas.gig.entity.UserType;
 import com.ninjas.gig.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

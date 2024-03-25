@@ -1,8 +1,7 @@
 package com.ninjas.gig.controller;
 
 import com.ninjas.gig.service.ProductService;
-import com.ninjas.gig.repository.ProductsRepository;
-import com.ninjas.gig.model.Product;
+import com.ninjas.gig.entity.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

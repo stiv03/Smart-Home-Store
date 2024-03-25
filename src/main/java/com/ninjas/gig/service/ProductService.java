@@ -2,11 +2,10 @@ package com.ninjas.gig.service;
 
 
 //import com.ninjas.gig.model.Category;
-import com.ninjas.gig.model.Product;
+import com.ninjas.gig.entity.Product;
 //import com.ninjas.gig.repository.CategoryRepository;
 import com.ninjas.gig.repository.ProductsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
