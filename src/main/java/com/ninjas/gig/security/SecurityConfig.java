@@ -8,6 +8,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,32 +24,22 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private CustomUserDetailsService customUserDetailsService;
+
     @Autowired
     public SecurityConfig(CustomUserDetailsService customUserDetailsService) {
+        this.customUserDetailsService = customUserDetailsService;
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http
-                .authorizeRequests(authorize -> authorize
-                        .requestMatchers("/api/auth/**", "/register").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .build();
-    }
+             http
+                    .csrf(AbstractHttpConfigurer::disable)
+                    .authorizeHttpRequests(authorize -> authorize
+                            .requestMatchers("/api/auth/**", "/register").permitAll()
+                            .anyRequest().authenticated()).httpBasic(Customizer.withDefaults());
 
-    @Bean
-    public UserDetailsService user(){
-        UserDetails admin = User.builder()
-                .username("admin")
-                .password("password")
-                .roles("ADMIN").build();
-        UserDetails user = User.builder()
-                .username("user")
-                .password("password")
-                .roles("CUSTOMER").build();
-
-        return new InMemoryUserDetailsManager(admin,user);
+             return http.build();
     }
 
     @Bean
