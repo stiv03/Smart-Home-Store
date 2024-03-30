@@ -1,6 +1,6 @@
 package com.ninjas.gig.repository;
 
-import com.ninjas.gig.model.UserAccount;
+import com.ninjas.gig.entity.UserAccount;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
