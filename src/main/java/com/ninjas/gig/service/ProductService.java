@@ -29,12 +29,6 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-//    public Product updatePrice(Long id, double newPrice) {
-//        Product product = productRepository.findById(id)
-//                .orElseThrow(() -> new RuntimeException("Product not found!"));
-//        product.setPrice(newPrice);
-//        return productRepository.save(product);
-//    }
 
     public List<Product> filterByCategory(String category) {
         return productRepository.findByCategory(category);

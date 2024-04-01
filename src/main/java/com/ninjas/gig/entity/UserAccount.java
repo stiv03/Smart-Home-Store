@@ -15,22 +15,25 @@ public class UserAccount {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "first_name", length = 50, nullable = false)
+    @Column(name = "photo", length = 255, columnDefinition = "VARCHAR(255) DEFAULT 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg'")
+    private String photo;
+
+    @Column(name = "first_name", length = 100, nullable = false)
     private String firstName;
 
-    @Column(name = "middle_name", length = 50)
+    @Column(name = "middle_name", length = 100)
     private String middleName;
 
-    @Column(name = "last_name", length = 50, nullable = false)
+    @Column(name = "last_name", length = 100, nullable = false)
     private String lastName;
 
-    @Column(name = "email", length = 50, nullable = false, unique = true)
+    @Column(name = "email", length = 100, nullable = false, unique = true)
     private String email;
 
-    @Column(name = "username", length = 50, nullable = false, unique = true)
+    @Column(name = "username", length = 100, nullable = false, unique = true)
     private String username;
 
-    @Column(name = "password", length = 50, nullable = false)
+    @Column(name = "password", length = 100, nullable = false)
     private String password;
 
     @Enumerated(EnumType.STRING)

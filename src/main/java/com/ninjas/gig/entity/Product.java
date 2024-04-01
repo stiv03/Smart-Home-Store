@@ -2,6 +2,7 @@ package com.ninjas.gig.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.Formula;
 
 import java.math.BigDecimal;
 
@@ -31,28 +32,18 @@ public class Product {
     @Column(name = "quantity", nullable = false)
     private Long quantity;
 
-    @Column(name = "description", length = 255, nullable = false)
+    @Column(name = "description", columnDefinition = "TEXT", nullable = false)
     private String description;
 
-    @Column(name = "min_price", precision = 5, scale = 2, nullable = false)
+    @Column(name = "min_price", precision = 7, scale = 2, nullable = false)
     private BigDecimal minPrice;
 
-    @Column(name = "original_price", precision = 5, scale = 2, nullable = false)
+    @Column(name = "original_price", precision = 7, scale = 2, nullable = false)
     private BigDecimal originalPrice;
 
-    @Column(name = "discount")
+    @Column(name = "discount", columnDefinition = "INT DEFAULT 0")
     private int discount;
 
-    @Transient
+    @Formula(value = "(original_price - (original_price * discount / 100))")
     private BigDecimal currentPrice;
-
-
-    public BigDecimal getCurrentPrice() {
-        BigDecimal discountedPrice = originalPrice.subtract(originalPrice.multiply(BigDecimal.valueOf(discount).divide(BigDecimal.valueOf(100))));
-        return discountedPrice;
-    }
-
-    public void setCurrentPrice(BigDecimal currentPrice) {
-        this.currentPrice = currentPrice;
-    }
 }

@@ -1,6 +1,6 @@
 package com.ninjas.gig.entity;
 
-public enum OrderStatus {
+public enum OrderStatusType {
     PENDING,
     PROCESSING,
     COMPLETED

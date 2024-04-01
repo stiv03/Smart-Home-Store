@@ -2,6 +2,7 @@ package com.ninjas.gig.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.Formula;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -26,12 +27,12 @@ public class Order {
     @Column(name = "order_datetime", nullable = false)
     private LocalDateTime orderDateTime;
 
-    @Column(name = "value", precision = 10, scale = 2, nullable = false)
+    @Formula("(SELECT SUM(order_products.purchase_price) FROM order_products WHERE order_products.order_id = id)")
     private BigDecimal value;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private OrderStatus status;
+    @Column(name = "status", columnDefinition = "VARCHAR(255) DEFAULT 'PENDING'")
+    private OrderStatusType status = OrderStatusType.PENDING;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
