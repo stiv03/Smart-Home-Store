@@ -1,12 +1,9 @@
 package com.ninjas.gig.repository;
 
-import com.ninjas.gig.model.Product;
+import com.ninjas.gig.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 
 public interface ProductsRepository extends JpaRepository<Product, Long> {
