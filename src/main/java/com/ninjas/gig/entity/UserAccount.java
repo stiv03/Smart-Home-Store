@@ -18,14 +18,8 @@ public class UserAccount {
     @Column(name = "photo", length = 255, columnDefinition = "VARCHAR(255) DEFAULT 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg'")
     private String photo;
 
-    @Column(name = "first_name", length = 100, nullable = false)
-    private String firstName;
-
-    @Column(name = "middle_name", length = 100)
-    private String middleName;
-
-    @Column(name = "last_name", length = 100, nullable = false)
-    private String lastName;
+    @Column(name = "name", length = 100, nullable = false)
+    private String name;
 
     @Column(name = "email", length = 100, nullable = false, unique = true)
     private String email;
@@ -37,6 +31,9 @@ public class UserAccount {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "user_type", nullable = false)
+    @Column(name = "user_type", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'CUSTOMER'")
     private UserType userType;
+
+    @Column(name = "JWToken", columnDefinition = "TEXT")
+    private String JWToken;
 }

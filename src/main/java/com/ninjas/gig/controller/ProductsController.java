@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 public class ProductsController {
     @Autowired
@@ -19,6 +20,7 @@ public class ProductsController {
         Product addedProduct = productService.addProduct(product);
         return ResponseEntity.status(HttpStatus.CREATED).body(addedProduct);
     }
+
 
     @GetMapping("/")
     public ResponseEntity<List<Product>> displayAllProducts() {
