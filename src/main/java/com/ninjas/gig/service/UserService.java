@@ -13,13 +13,11 @@ import java.util.List;
 public class UserService {
     @Autowired
     private UserRepository repository;
-    public record UserRequest(String firstName, String middleName, String lastName, String email, String username, String password, UserType userType) {}
+    public record UserRequest(String name, String email, String username, String password, UserType userType) {}
 
     public List<UserAccount> addUser(@RequestBody UserRequest userRequest) {
         UserAccount newUser = new UserAccount();
-        newUser.setFirstName(userRequest.firstName);
-        newUser.setMiddleName(userRequest.middleName);
-        newUser.setLastName(userRequest.lastName);
+        newUser.setName(userRequest.name);
         newUser.setEmail(userRequest.email);
         newUser.setUsername(userRequest.username);
         newUser.setPassword(userRequest.password);

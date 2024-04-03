@@ -35,6 +35,9 @@ public class Product {
     @Column(name = "description", columnDefinition = "TEXT", nullable = false)
     private String description;
 
+    @Column(name = "technical_documentation", columnDefinition = "TEXT", nullable = false)
+    private String technicalDocumentation;
+
     @Column(name = "min_price", precision = 7, scale = 2, nullable = false)
     private BigDecimal minPrice;
 
