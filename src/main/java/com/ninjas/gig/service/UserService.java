@@ -1,18 +1,21 @@
 package com.ninjas.gig.service;
 
-import com.ninjas.gig.entity.UserType;
 import com.ninjas.gig.entity.UserAccount;
+import com.ninjas.gig.entity.UserType;
 import com.ninjas.gig.repository.UserRepository;
-import jakarta.persistence.Column;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+
 import java.util.List;
 
 @Service
 public class UserService {
-    @Autowired
-    private UserRepository repository;
+    private final UserRepository repository;
+
+    public UserService(UserRepository repository) {
+        this.repository = repository;
+    }
+
     public record UserRequest(String name, String email, String username, String password, UserType userType) {}
 
     public List<UserAccount> addUser(@RequestBody UserRequest userRequest) {
