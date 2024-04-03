@@ -1,5 +1,6 @@
 package com.ninjas.gig.controller;
 
+import com.ninjas.gig.repository.ResourceNotFoundException;
 import com.ninjas.gig.service.ProductService;
 import com.ninjas.gig.entity.Product;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,25 +16,18 @@ public class ProductsController {
     @Autowired
     private ProductService productService;
 
-    @PostMapping("/")
-    public ResponseEntity<Product> addProduct(@RequestBody Product product) {
-        Product addedProduct = productService.addProduct(product);
-        return ResponseEntity.status(HttpStatus.CREATED).body(addedProduct);
-    }
-
-
-    @GetMapping("/")
+    // клиент
+    @GetMapping("/products")
     public ResponseEntity<List<Product>> displayAllProducts() {
         List<Product> products = productService.getAll();
         return ResponseEntity.ok().body(products);
     }
 
     @GetMapping("/{category}")
-    public ResponseEntity<List<Product>> byCategory(@PathVariable String category) {
+    public ResponseEntity<List<Product>> displayByCategory(@PathVariable String category) {
         List<Product> products = productService.filterByCategory(category);
         return ResponseEntity.ok().body(products);
     }
-
 
     @PostMapping("/product/search")
     public ResponseEntity<List<Product>> searchByName(@RequestBody String name) {
@@ -44,5 +38,25 @@ public class ProductsController {
         return ResponseEntity.ok().body(similarProducts);
 
     }
+    // служител
+    @PostMapping("/products")
+    public ResponseEntity<Product> addProduct(@RequestBody Product product) {
+        Product addedProduct = productService.addProduct(product);
+        return ResponseEntity.status(HttpStatus.CREATED).body(addedProduct);
+    }
+    @PutMapping("/products/{id}")
+    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product productChanges) {
+        Product updatedProduct = productService.saveChanges(id, productChanges);
+        return ResponseEntity.ok(updatedProduct);
+    }
+
+    // админ
+    @DeleteMapping("/products/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
 
 }
