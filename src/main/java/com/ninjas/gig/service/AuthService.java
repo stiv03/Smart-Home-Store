@@ -3,6 +3,7 @@ package com.ninjas.gig.service;
 import com.ninjas.gig.dto.UserLoginDTO;
 import com.ninjas.gig.dto.UserRegisterDTO;
 import com.ninjas.gig.entity.UserAccount;
+import com.ninjas.gig.entity.UserType;
 import com.ninjas.gig.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,7 +40,11 @@ public class AuthService {
         newUser.setEmail(registerDTO.getEmail());
         newUser.setUsername(registerDTO.getUsername());
         newUser.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
-        newUser.setUserType(registerDTO.getUserType());
+        if (registerDTO.getUserType() == null){
+            newUser.setUserType(UserType.CUSTOMER);
+        } else {
+            newUser.setUserType(registerDTO.getUserType());
+        }
         userRepository.save(newUser);
         return new ResponseEntity<>("User registered successfully", HttpStatus.OK);
     }
