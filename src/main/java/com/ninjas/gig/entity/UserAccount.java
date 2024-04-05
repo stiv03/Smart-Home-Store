@@ -33,7 +33,7 @@ public class UserAccount {
     @Enumerated(EnumType.STRING)
     @Column(name = "user_type", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'CUSTOMER'")
     private UserType userType = UserType.CUSTOMER;
-
+  
     @Column(name = "JWToken", columnDefinition = "TEXT")
     private String JWToken;
 }
