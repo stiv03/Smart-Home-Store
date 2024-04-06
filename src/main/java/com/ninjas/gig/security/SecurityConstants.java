@@ -1,2 +1,4 @@
-package com.ninjas.gig.security;public class SecurityConstants {
+package com.ninjas.gig.security;
+
+public class SecurityConstants {
 }
