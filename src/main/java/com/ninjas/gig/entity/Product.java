@@ -49,4 +49,7 @@ public class Product {
 
     @Formula(value = "(original_price - (original_price * discount / 100))")
     private BigDecimal currentPrice;
+
+    @Column(name = "is_deleted", columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private boolean isDeleted;
 }

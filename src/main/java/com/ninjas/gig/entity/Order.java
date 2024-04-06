@@ -7,6 +7,7 @@ import org.hibernate.annotations.Formula;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -20,7 +21,7 @@ public class Order {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id", nullable = false)
-    private UserAccount clientId;
+    private UserAccount client;
 
     @Column(name = "address", length = 255, nullable = false)
     private String address;
@@ -36,12 +37,13 @@ public class Order {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", columnDefinition = "VARCHAR(255) DEFAULT 'PENDING'")
-    private OrderStatusType status = OrderStatusType.PENDING;
+    private OrderStatusType status;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id")
-    private UserAccount customerId;
+    private UserAccount customer;
 
     @Column(name = "completed_datetime")
     private LocalDateTime completedDateTime;
+
 }
