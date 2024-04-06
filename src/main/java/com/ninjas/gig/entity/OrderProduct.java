@@ -17,11 +17,11 @@ public class OrderProduct {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "order_id", nullable = false)
-    private Order orderId;
+    private Order order;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id", nullable = false)
-    private Product productId;
+    private Product product;
 
     @Column(name = "purchase_price", precision = 7, scale = 2)
     private BigDecimal purchasePrice;
