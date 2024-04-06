@@ -4,6 +4,7 @@ package com.ninjas.gig.service;
 import com.ninjas.gig.entity.Product;
 import com.ninjas.gig.repository.ProductsRepository;
 import com.ninjas.gig.repository.ResourceNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class ProductService {
     @Autowired
     private ProductsRepository productRepository;
+
+    // методи за OrderService
+    @Transactional
+    public Product getProductById(Long productId) {
+        return productRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("Product not found with id: " + productId));
+    }
+    @Transactional
+    public Product saveProduct(Product product) {
+        return productRepository.save(product);
+    }
 
     // клиент
     public List<Product> getAll() {
@@ -90,9 +102,5 @@ public class ProductService {
     public void deleteProduct(Long id){
         productRepository.deleteById(id);
     }
-
-
-
-
 
 }

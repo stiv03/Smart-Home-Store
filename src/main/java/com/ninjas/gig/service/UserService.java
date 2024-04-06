@@ -15,6 +15,12 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    // методи за OrderService
+    public UserAccount getUserById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+    }
+
     // клиент
     public UserAccount registerUser(UserAccount userAccount){
         if (userAccount.getPhoto() == null) {
