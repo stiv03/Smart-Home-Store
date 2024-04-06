@@ -5,6 +5,7 @@ import com.ninjas.gig.entity.Product;
 import com.ninjas.gig.repository.ProductsRepository;
 import com.ninjas.gig.repository.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
