@@ -1,5 +1,6 @@
 package com.ninjas.gig.service;
 
+import com.ninjas.gig.entity.Product;
 import com.ninjas.gig.entity.UserType;
 import com.ninjas.gig.entity.UserAccount;
 import com.ninjas.gig.repository.UserRepository;
@@ -12,22 +13,27 @@ import java.util.List;
 @Service
 public class UserService {
     @Autowired
-    private UserRepository repository;
-    public record UserRequest(String name, String email, String username, String password, UserType userType) {}
+    private UserRepository userRepository;
 
-    public List<UserAccount> addUser(@RequestBody UserRequest userRequest) {
-        UserAccount newUser = new UserAccount();
-        newUser.setName(userRequest.name);
-        newUser.setEmail(userRequest.email);
-        newUser.setUsername(userRequest.username);
-        newUser.setPassword(userRequest.password);
-        newUser.setUserType(userRequest.userType);
-        repository.save(newUser);
-        return repository.findAll();
+    // клиент
+    public UserAccount registerUser(UserAccount userAccount){
+        if (userAccount.getPhoto() == null) {
+            userAccount.setPhoto("https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg");
+        }
+        if (userAccount.getUserType() == null) {
+            userAccount.setUserType(UserType.CUSTOMER);
+        }
+        return userRepository.save(userAccount);
     }
 
-    public List<UserAccount> displayAll() {
-        return repository.findAll();
+    public List<UserAccount> getAllUsers() {
+        return userRepository.findAll();
     }
+
+    // служител
+
+
+
+    // админ
 
 }
