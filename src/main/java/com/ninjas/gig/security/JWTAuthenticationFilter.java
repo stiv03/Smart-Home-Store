@@ -17,14 +17,11 @@ import java.io.IOException;
 
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
+    @Autowired
     private JWTGenerator jwtGenerator;
+    @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
-    @Autowired
-    public JWTAuthenticationFilter(JWTGenerator jwtGenerator, CustomUserDetailsService customUserDetailsService) {
-        this.jwtGenerator = jwtGenerator;
-        this.customUserDetailsService = customUserDetailsService;
-    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
