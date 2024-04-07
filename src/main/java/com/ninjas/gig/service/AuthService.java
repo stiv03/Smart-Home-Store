@@ -1,16 +1,19 @@
 package com.ninjas.gig.service;
 
+import com.ninjas.gig.dto.AuthResponseDTO;
 import com.ninjas.gig.dto.UserLoginDTO;
 import com.ninjas.gig.dto.UserRegisterDTO;
 import com.ninjas.gig.entity.UserAccount;
 import com.ninjas.gig.entity.UserType;
 import com.ninjas.gig.repository.UserRepository;
+import com.ninjas.gig.security.JWTGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,13 +25,15 @@ public class AuthService {
     UserRepository userRepository;
     PasswordEncoder passwordEncoder;
     AuthenticationManager authenticationManager;
+    JWTGenerator jwtGenerator;
 
 
     @Autowired
-    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager){
+    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JWTGenerator jwtGenerator){
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
+        this.jwtGenerator = jwtGenerator;
     }
 
     public ResponseEntity<String> registerUser(@RequestBody UserRegisterDTO registerDTO) {
@@ -49,16 +54,20 @@ public class AuthService {
         return new ResponseEntity<>("User registered successfully", HttpStatus.OK);
     }
 
-    public ResponseEntity<String> loginUser(@RequestBody UserLoginDTO loginDTO){
+    public ResponseEntity<?> loginUser(@RequestBody UserLoginDTO loginDTO){
         try {
             Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDTO.getUsername(),
                         loginDTO.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            String token = jwtGenerator.generateToken(authentication);
+            return new ResponseEntity<>(new AuthResponseDTO(token), HttpStatus.OK);
+        } catch (AuthenticationException authEx) {
+            authEx.printStackTrace();
+            return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
         } catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<>("Something went wrong", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>("User signed successfully", HttpStatus.OK);
     }
 }
