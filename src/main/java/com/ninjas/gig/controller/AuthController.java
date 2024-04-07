@@ -7,10 +7,7 @@ import com.ninjas.gig.security.JWTGenerator;
 import com.ninjas.gig.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class AuthController {
@@ -24,7 +21,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody UserRegisterDTO registerDTO){
+    public ResponseEntity<?> register(@RequestBody UserRegisterDTO registerDTO){
         return authService.registerUser(registerDTO);
     }
 
@@ -33,4 +30,8 @@ public class AuthController {
         return authService.loginUser(loginDTO);
     }
 
+//    @GetMapping("/test/test")
+//    public ResponseEntity<String> sayHello(){
+//        return ResponseEntity.ok("Hello you are authorized");
+//    }
 }
