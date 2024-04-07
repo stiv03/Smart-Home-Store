@@ -4,7 +4,7 @@ import java.security.SecureRandom;
 import java.util.Base64;
 
 public class SecurityConstants {
-    public static final long JWT_EXPIRATION = 70000;
+    public static final long JWT_EXPIRATION = 60000 * 60 * 24; // 24 hours authorization
     public static final String JWT_SECRET;
 
     static {
