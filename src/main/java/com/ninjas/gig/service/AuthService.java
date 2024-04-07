@@ -36,9 +36,12 @@ public class AuthService {
         this.jwtGenerator = jwtGenerator;
     }
 
-    public ResponseEntity<String> registerUser(@RequestBody UserRegisterDTO registerDTO) {
+    public ResponseEntity<?> registerUser(@RequestBody UserRegisterDTO registerDTO) {
         if (userRepository.existsByUsername(registerDTO.getUsername())) {
             return new ResponseEntity<>("Username is taken!", HttpStatus.BAD_REQUEST);
+        }
+        if (userRepository.existsByEmail(registerDTO.getEmail())){
+            return new ResponseEntity<>("Email is taken!", HttpStatus.BAD_REQUEST);
         }
         UserAccount newUser = new UserAccount();
         newUser.setName(registerDTO.getName());
@@ -51,7 +54,8 @@ public class AuthService {
             newUser.setUserType(registerDTO.getUserType());
         }
         userRepository.save(newUser);
-        return new ResponseEntity<>("User registered successfully", HttpStatus.OK);
+        var token = jwtGenerator.generateToken(newUser);
+        return new ResponseEntity<>(new AuthResponseDTO(token), HttpStatus.OK);
     }
 
     public ResponseEntity<?> loginUser(@RequestBody UserLoginDTO loginDTO){
