@@ -19,7 +19,7 @@ public class ProductsController {
     // клиент
     @GetMapping("/products")
     public ResponseEntity<List<Product>> displayAllProducts() {
-        List<Product> products = productService.getAll();
+        List<Product> products = productService.findAllAvailableProducts();
         return ResponseEntity.ok().body(products);
     }
 

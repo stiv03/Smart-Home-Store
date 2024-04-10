@@ -4,14 +4,20 @@ package com.ninjas.gig.service;
 import com.ninjas.gig.entity.Product;
 import com.ninjas.gig.repository.ProductsRepository;
 import com.ninjas.gig.repository.ResourceNotFoundException;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,8 +39,24 @@ public class ProductService {
     }
 
     // клиент
-    public List<Product> getAll() {
-        return productRepository.findAll();
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    public List<Product> findAllAvailableProducts() {
+        Query query = entityManager.createQuery(
+                "SELECT p FROM Product p WHERE p.isDeleted = false AND p.quantity > 0",
+                Product.class
+        );
+        List<Product> products = query.getResultList();
+
+        // Закръгляне на цените до 2 знака след запетаята
+        for (Product product : products) {
+            product.setMinPrice(product.getMinPrice().setScale(2, BigDecimal.ROUND_HALF_UP));
+            product.setOriginalPrice(product.getOriginalPrice().setScale(2, BigDecimal.ROUND_HALF_UP));
+            product.setCurrentPrice(product.getCurrentPrice().setScale(2, BigDecimal.ROUND_HALF_UP));
+        }
+
+        return products;
     }
 
     public List<Product> filterByCategory(String category) {
@@ -43,7 +65,7 @@ public class ProductService {
 
     public List<Product> findSimilarProducts(String name) {
         LevenshteinDistance distance = new LevenshteinDistance();
-        List<Product> allProducts = getAll();
+        List<Product> allProducts = findAllAvailableProducts();
         List<Product> similarProducts = new ArrayList<>();
 
         String cleanedName = name.replaceAll("\\s+", "").toLowerCase();
