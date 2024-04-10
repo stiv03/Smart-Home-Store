@@ -3,24 +3,28 @@ package com.ninjas.gig.service;
 
 import com.ninjas.gig.entity.Product;
 import com.ninjas.gig.repository.ProductsRepository;
+
 import com.ninjas.gig.repository.ResourceNotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+
+import com.ninjas.gig.exception.ResourceNotFoundException;
+
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.text.similarity.LevenshteinDistance;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public class ProductService {

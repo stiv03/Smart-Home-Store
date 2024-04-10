@@ -1,6 +1,5 @@
 package com.ninjas.gig.controller;
 
-import com.ninjas.gig.repository.ResourceNotFoundException;
 import com.ninjas.gig.service.ProductService;
 import com.ninjas.gig.entity.Product;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 public class ProductsController {
     @Autowired
@@ -22,6 +20,12 @@ public class ProductsController {
         List<Product> products = productService.findAllAvailableProducts();
         return ResponseEntity.ok().body(products);
     }
+    @GetMapping("/products/{id}")
+    public ResponseEntity<Product> displayProductById(@PathVariable Long id) {
+        Product product = productService.findById(id);
+        return ResponseEntity.ok().body(product);
+    }
+
 
     @GetMapping("/{category}")
     public ResponseEntity<List<Product>> displayByCategory(@PathVariable String category) {

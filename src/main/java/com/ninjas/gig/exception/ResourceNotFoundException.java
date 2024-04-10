@@ -1,4 +1,4 @@
-package com.ninjas.gig.repository;
+package com.ninjas.gig.exception;
 
 public class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException(String message) {
