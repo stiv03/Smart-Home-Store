@@ -52,4 +52,6 @@ public class Product {
 
     @Column(name = "is_deleted", columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean isDeleted;
+
+
 }

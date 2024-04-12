@@ -96,9 +96,8 @@ public class ProductService {
         if (product.getDiscount() == 0) {
             product.setDiscount(0);
         }
-//        if (product.getIsDeleted() == null) {
-//            product.setIsDeleted(false);
-//        }
+        product.setDeleted(false);
+
         return productRepository.save(product);
     }
 
