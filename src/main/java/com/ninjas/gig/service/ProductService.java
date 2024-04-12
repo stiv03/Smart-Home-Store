@@ -1,10 +1,8 @@
 package com.ninjas.gig.service;
 
-
 import com.ninjas.gig.entity.Product;
 import com.ninjas.gig.repository.ProductsRepository;
 
-import com.ninjas.gig.repository.ResourceNotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
@@ -98,6 +96,9 @@ public class ProductService {
         if (product.getDiscount() == 0) {
             product.setDiscount(0);
         }
+//        if (product.getIsDeleted() == null) {
+//            product.setIsDeleted(false);
+//        }
         return productRepository.save(product);
     }
 
@@ -117,7 +118,6 @@ public class ProductService {
         product.setCategory(productChanges.getCategory());
         product.setQuantity(productChanges.getQuantity());
         product.setDescription(productChanges.getDescription());
-        product.setTechnicalDocumentation(productChanges.getTechnicalDocumentation());
         product.setMinPrice(productChanges.getMinPrice());
         product.setOriginalPrice(productChanges.getOriginalPrice());
         product.setDiscount(productChanges.getDiscount());
