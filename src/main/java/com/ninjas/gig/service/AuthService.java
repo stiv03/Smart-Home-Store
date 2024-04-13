@@ -53,6 +53,7 @@ public class AuthService {
         } else {
             newUser.setUserType(registerDTO.getUserType());
         }
+        newUser.setPhoto("https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg");
         userRepository.save(newUser);
         var token = jwtGenerator.generateToken(newUser);
         return new ResponseEntity<>(new AuthResponseDTO(token), HttpStatus.OK);

@@ -17,6 +17,9 @@ public class Product {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "photo", length = 255, nullable = false)
+    private String photo;
+
     @Column(name = "name", length = 100, nullable = false, unique = true)
     private String name;
 
@@ -35,9 +38,6 @@ public class Product {
     @Column(name = "description", columnDefinition = "TEXT", nullable = false)
     private String description;
 
-    @Column(name = "technical_documentation", columnDefinition = "TEXT", nullable = false)
-    private String technicalDocumentation;
-
     @Column(name = "min_price", precision = 7, scale = 2, nullable = false)
     private BigDecimal minPrice;
 
@@ -52,4 +52,6 @@ public class Product {
 
     @Column(name = "is_deleted", columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean isDeleted;
+
+
 }

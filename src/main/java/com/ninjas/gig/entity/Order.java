@@ -32,7 +32,7 @@ public class Order {
     @Column(name = "order_datetime", nullable = false)
     private LocalDateTime orderDateTime;
 
-    @Formula("(SELECT SUM(order_products.purchase_price) FROM order_products WHERE order_products.order_id = id)")
+    @Formula("(SELECT SUM(order_products.purchase_price * order_products.quantity) FROM order_products WHERE order_products.order_id = id)")
     private BigDecimal value;
 
     @Enumerated(EnumType.STRING)

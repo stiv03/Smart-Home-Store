@@ -22,22 +22,13 @@ public class UserService {
     }
 
     // клиент
-    public UserAccount registerUser(UserAccount userAccount){
-        if (userAccount.getPhoto() == null) {
-            userAccount.setPhoto("https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg");
-        }
-        if (userAccount.getUserType() == null) {
-            userAccount.setUserType(UserType.CUSTOMER);
-        }
-        return userRepository.save(userAccount);
-    }
 
+
+
+    // служител
     public List<UserAccount> getAllUsers() {
         return userRepository.findAll();
     }
-
-    // служител
-
 
 
     // админ

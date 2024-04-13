@@ -23,6 +23,9 @@ public class OrderProduct {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+    @Column(name = "quantity", nullable = false)
+    private Long quantity;
+
     @Column(name = "purchase_price", precision = 7, scale = 2)
     private BigDecimal purchasePrice;
 }
