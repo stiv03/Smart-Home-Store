@@ -40,7 +40,7 @@ public class UserAccount implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "user_type", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'CUSTOMER'")
-    private UserType userType = UserType.CUSTOMER;
+    private UserType userType;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

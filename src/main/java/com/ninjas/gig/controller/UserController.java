@@ -17,11 +17,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/user")
-    public ResponseEntity<UserAccount> addUserAccount(@RequestBody UserAccount userAccount) {
-        UserAccount users = userService.registerUser(userAccount);
-        return ResponseEntity.status(HttpStatus.CREATED).body(users);
-    }
     @GetMapping("/user")
     public ResponseEntity<List<UserAccount>> displayAllUsers() {
         List<UserAccount> users = userService.getAllUsers();
