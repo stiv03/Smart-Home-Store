@@ -85,6 +85,12 @@ public class ProductsController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/deletedProducts")
+    public ResponseEntity<List<Product>> displayDeletedProducts() {
+        List<Product> products = productService.findDeletedProducts();
+        return ResponseEntity.ok().body(products);
+    }
+
     @PostMapping("/productReturn/{id}")
     public ResponseEntity<Void> returnProduct(@PathVariable Long id) {
         productService.returnProduct(id);
