@@ -192,6 +192,27 @@ public class ProductService {
         return productRepository.save(product);
     }
 
+    public void promotionSet(Long id, int newDiscount) {
+        Optional<Product> productOptional = productRepository.findById(id);
+        Product product = productOptional.orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
+
+        BigDecimal discountPercentage = BigDecimal.valueOf(newDiscount);
+        BigDecimal discountMultiplier = BigDecimal.ONE.subtract(discountPercentage.divide(BigDecimal.valueOf(100)));
+
+        BigDecimal discountedPrice = product.getOriginalPrice().multiply(discountMultiplier);
+
+        while (product.getMinPrice().compareTo(discountedPrice) > 0) {
+            newDiscount--;
+            discountPercentage = BigDecimal.valueOf(newDiscount);
+            discountMultiplier = BigDecimal.ONE.subtract(discountPercentage.divide(BigDecimal.valueOf(100)));
+            discountedPrice = product.getOriginalPrice().multiply(discountMultiplier);
+        }
+
+        product.setDiscount(newDiscount);
+        productRepository.save(product);
+    }
+
+
     // админ
     public void deleteProduct(Long id) {
         Product product = productRepository.findById(id)
