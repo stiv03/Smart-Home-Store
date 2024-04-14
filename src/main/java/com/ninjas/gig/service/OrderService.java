@@ -5,6 +5,9 @@ import com.ninjas.gig.dto.OrderRequestDTO;
 import com.ninjas.gig.entity.*;
 import com.ninjas.gig.repository.OrderProductRepository;
 import com.ninjas.gig.repository.OrderRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import jakarta.websocket.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +34,8 @@ public class OrderService {
     @Autowired
     private UserService userService;
 
-
+    @PersistenceContext
+    private EntityManager entityManager;
 
     // клиент
     @Transactional
@@ -80,6 +84,17 @@ public class OrderService {
         return order;
     }
 
+
+
+    // служител
+    public List<Order> getAll() {
+        return orderRepository.findAll();
+    }
+
+    public List<OrderProduct> getAllOrderProductsByOrderId(Long orderId) {
+        return orderProductRepository.findByOrderId(orderId);
+    }
+
     @Transactional
     public List<OrderProductDetailsDTO> getOrderProductsDetails(Long orderId) {
         List<OrderProduct> orderProducts = orderProductRepository.findByOrderId(orderId);
@@ -96,27 +111,55 @@ public class OrderService {
 
         return orderProductDetailsDTOList;
     }
+    @Transactional
+    public Order changeOrderStatus(Long orderId, OrderStatusType newStatus, Long customerId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("Order not found: " + orderId));
 
-    // служител
-    public List<Order> getAll() {
-        return orderRepository.findAll();
-    }
+        UserAccount customer = userService.getUserById(customerId);
+        order.setCustomer(customer);
 
+        switch (newStatus) {
+            case PENDING:
+                order.setStatus(OrderStatusType.PENDING);
+                break;
+            case PROCESSING:
+                order.setChangeDateTime(LocalDateTime.now());
+                order.setStatus(OrderStatusType.PROCESSING);
+                break;
+            case COMPLETED:
+                order.setChangeDateTime(LocalDateTime.now());
+                order.setStatus(OrderStatusType.COMPLETED);
+                break;
+            case CANCELED:
+                order.setChangeDateTime(LocalDateTime.now());
 
-    public List<OrderProduct> getAllOrderProductsByOrderId(Long orderId) {
-        return orderProductRepository.findByOrderId(orderId);
+                List<OrderProduct> orderProducts = orderProductRepository.findByOrderId(orderId);
+                for (OrderProduct orderProduct : orderProducts) {
+                    Product product = productService.getProductById(orderProduct.getProduct().getId());
+                    product.setQuantity(product.getQuantity() + orderProduct.getQuantity());
+                    productService.saveProduct(product);
+                }
+
+                order.setStatus(OrderStatusType.CANCELED);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid order status: " + newStatus);
+        }
+
+        return orderRepository.save(order);
     }
 
     // админ
     public BigDecimal calculateTotalRevenue(LocalDateTime startDate, LocalDateTime endDate) {
-        List<Order> orders = orderRepository.findByOrderDateTimeBetween(startDate, endDate);
-        BigDecimal value = BigDecimal.ZERO;
-        for (Order order : orders) {
-            if (order.getStatus() == OrderStatusType.COMPLETED) {
-                value = value.add(order.getValue());
-            }
-        }
-        return value;
+        Query query = entityManager.createQuery(
+                "SELECT COALESCE(SUM(o.value), 0) FROM Order o WHERE o.change_datetime >= :startDate AND o.change_datetime <= :endDate AND o.status = :status",
+                BigDecimal.class
+        );
+        query.setParameter("startDate", startDate);
+        query.setParameter("endDate", endDate);
+        query.setParameter("status", OrderStatusType.COMPLETED);
+        return (BigDecimal) query.getSingleResult();
     }
 
 }

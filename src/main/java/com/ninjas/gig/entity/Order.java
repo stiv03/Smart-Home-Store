@@ -43,7 +43,8 @@ public class Order {
     @JoinColumn(name = "customer_id")
     private UserAccount customer;
 
-    @Column(name = "completed_datetime")
-    private LocalDateTime completedDateTime;
+    @Column(name = "change_datetime")
+    private LocalDateTime ChangeDateTime;
+
 
 }

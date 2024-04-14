@@ -202,6 +202,22 @@ public class ProductService {
         productRepository.save(product);
     }
 
+    public List<Product> findDeletedProducts() {
+        Query query = entityManager.createQuery(
+                "SELECT p FROM Product p WHERE p.isDeleted = true",
+                Product.class
+        );
+        List<Product> products = query.getResultList();
+
+        for (Product product : products) {
+            product.setMinPrice(product.getMinPrice().setScale(2, BigDecimal.ROUND_HALF_UP));
+            product.setOriginalPrice(product.getOriginalPrice().setScale(2, BigDecimal.ROUND_HALF_UP));
+            product.setCurrentPrice(product.getCurrentPrice().setScale(2, BigDecimal.ROUND_HALF_UP));
+        }
+
+        return products;
+    }
+
     public void returnProduct(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Product not found with id: " + id));
