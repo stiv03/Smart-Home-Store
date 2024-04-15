@@ -16,7 +16,6 @@ public class ProductsController {
     private ProductService productService;
 
     // клиент
-    @PreAuthorize("hasAuthority('CUSTOMER')")
     @GetMapping("product/{productId}")
     public ResponseEntity<Product> getProductById(@PathVariable Long productId) {
         Product product = productService.getProductById(productId);
@@ -26,14 +25,12 @@ public class ProductsController {
         return ResponseEntity.ok(product);
     }
 
-    @PreAuthorize("hasAuthority('CUSTOMER')")
     @GetMapping("/products")
     public ResponseEntity<List<Product>> displayAllProducts() {
         List<Product> products = productService.findAllAvailableProducts();
         return ResponseEntity.ok().body(products);
     }
 
-    @PreAuthorize("hasAuthority('CUSTOMER')")
     @GetMapping("/promotional")
     public ResponseEntity<List<Product>> getAllPromotionalProducts() {
         List<Product> products = productService.findAllPromotionalProducts();
@@ -41,14 +38,12 @@ public class ProductsController {
         return ResponseEntity.ok(products);
     }
 
-    @PreAuthorize("hasAuthority('CUSTOMER')")
     @GetMapping("/{category}")
     public ResponseEntity<List<Product>> displayByCategory(@PathVariable String category) {
         List<Product> products = productService.filterByCategory(category);
         return ResponseEntity.ok().body(products);
     }
 
-    @PreAuthorize("hasAuthority('CUSTOMER')")
     @GetMapping("/product/search")
     public ResponseEntity<List<Product>> searchByName(@RequestBody String name) {
         List<Product> similarProducts = productService.findSimilarProducts(name);
