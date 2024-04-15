@@ -1,5 +1,6 @@
 package com.ninjas.gig.security;
 
+import com.ninjas.gig.entity.UserType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -17,24 +18,26 @@ import java.util.function.Function;
 @Component
 public class JWTGenerator {
 
-    public String generateToken(UserDetails userDetails){
+    public String generateToken(UserDetails userDetails, UserType userType){
         String username = userDetails.getUsername();
         Date currentDate = new Date(System.currentTimeMillis());
         Date expireDate = new Date(currentDate.getTime() + SecurityConstants.JWT_EXPIRATION);
 
         return Jwts.builder()
+                .claim("userType",userType)
                 .setSubject(username)
                 .setIssuedAt(currentDate)
                 .setExpiration(expireDate)
                 .signWith(SignatureAlgorithm.HS256, getSignKey())
                 .compact();
     }
-    public String generateToken(Authentication authentication){
+    public String generateToken(Authentication authentication, UserType userType){
         String username = authentication.getName();
         Date currentDate = new Date(System.currentTimeMillis());
         Date expireDate = new Date(currentDate.getTime() + SecurityConstants.JWT_EXPIRATION);
 
         return Jwts.builder()
+                .claim("userType", userType)
                 .setSubject(username)
                 .setIssuedAt(currentDate)
                 .setExpiration(expireDate)
