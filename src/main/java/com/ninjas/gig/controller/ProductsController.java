@@ -88,6 +88,7 @@ public class ProductsController {
         return ResponseEntity.ok(updatedProduct);
     }
 
+    @PreAuthorize("hasAnyAuthority('EMPLOYEE','ADMIN')")
     @PostMapping("/set-discount/{id}")
     public ResponseEntity<String> setDiscount(@PathVariable Long id, @RequestBody int newDiscount) {
         productService.promotionSet(id, newDiscount);
