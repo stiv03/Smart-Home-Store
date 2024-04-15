@@ -29,9 +29,4 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody UserLoginDTO loginDTO){
         return authService.loginUser(loginDTO);
     }
-
-//    @GetMapping("/test/test")
-//    public ResponseEntity<String> sayHello(){
-//        return ResponseEntity.ok("Hello you are authorized");
-//    }
 }
