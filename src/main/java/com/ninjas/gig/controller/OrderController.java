@@ -3,12 +3,14 @@ package com.ninjas.gig.controller;
 import com.ninjas.gig.dto.OrderProductDetailsDTO;
 import com.ninjas.gig.dto.OrderRequestDTO;
 import com.ninjas.gig.dto.OrderStatusChangeDTO;
+import com.ninjas.gig.dto.StatisticsRequestDTO;
 import com.ninjas.gig.entity.Order;
 import com.ninjas.gig.entity.OrderProduct;
 import com.ninjas.gig.entity.OrderStatusType;
 import com.ninjas.gig.entity.Product;
 import com.ninjas.gig.service.OrderService;
 import com.ninjas.gig.service.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -68,9 +70,10 @@ public class OrderController {
     // админ
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/revenue")
-    public ResponseEntity<BigDecimal> getTotalRevenue(
-            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
-            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+    public ResponseEntity<BigDecimal> getTotalRevenue(@Valid @RequestBody StatisticsRequestDTO request) {
+
+        LocalDateTime startDate = request.getStartDate();
+        LocalDateTime endDate = request.getEndDate();
 
         if (startDate.isAfter(endDate)) {
             return ResponseEntity.badRequest().build();

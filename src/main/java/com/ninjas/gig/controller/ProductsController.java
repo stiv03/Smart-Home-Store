@@ -88,6 +88,12 @@ public class ProductsController {
         return ResponseEntity.ok(updatedProduct);
     }
 
+    @PostMapping("/set-discount/{id}")
+    public ResponseEntity<String> setDiscount(@PathVariable Long id, @RequestBody int newDiscount) {
+        productService.promotionSet(id, newDiscount);
+        return ResponseEntity.ok("Discount set successfully");
+    }
+
     // админ
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/productDelete/{id}")
