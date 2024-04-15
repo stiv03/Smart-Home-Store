@@ -2,8 +2,10 @@ package com.ninjas.gig.controller;
 
 import com.ninjas.gig.dto.OrderProductDetailsDTO;
 import com.ninjas.gig.dto.OrderRequestDTO;
+import com.ninjas.gig.dto.OrderStatusChangeDTO;
 import com.ninjas.gig.entity.Order;
 import com.ninjas.gig.entity.OrderProduct;
+import com.ninjas.gig.entity.OrderStatusType;
 import com.ninjas.gig.entity.Product;
 import com.ninjas.gig.service.OrderService;
 import com.ninjas.gig.service.ProductService;
@@ -25,15 +27,9 @@ public class OrderController {
 
     // клиент
     @PostMapping("/createOrder")
-    public ResponseEntity<Order> createOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
-        Order createdOrder = orderService.createOrder(orderRequestDTO);
-        return ResponseEntity.ok(createdOrder);
-    }
-
-    @GetMapping("/order/{orderId}")
-    public ResponseEntity<List<OrderProductDetailsDTO>> getOrderProductsDetails(@PathVariable Long orderId) {
-        List<OrderProductDetailsDTO> orderProductsDetails = orderService.getOrderProductsDetails(orderId);
-        return ResponseEntity.ok(orderProductsDetails);
+    public ResponseEntity<Void> createOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
+        orderService.createOrder(orderRequestDTO);
+        return ResponseEntity.ok().build();
     }
 
     // служител
@@ -42,7 +38,6 @@ public class OrderController {
         List<Order> orders = orderService.getAll();
         return ResponseEntity.ok().body(orders);
     }
-
     @GetMapping("/orders/{orderId}")
     public ResponseEntity<List<OrderProduct>> getOrderProductsByOrderId(@PathVariable Long orderId) {
         List<OrderProduct> orderProducts = orderService.getAllOrderProductsByOrderId(orderId);
@@ -53,14 +48,31 @@ public class OrderController {
 
         return new ResponseEntity<>(orderProducts, HttpStatus.OK);
     }
+    @GetMapping("/order/{orderId}")
+    public ResponseEntity<List<OrderProductDetailsDTO>> getOrderProductsDetails(@PathVariable Long orderId) {
+        List<OrderProductDetailsDTO> orderProductsDetails = orderService.getOrderProductsDetails(orderId);
+        return ResponseEntity.ok(orderProductsDetails);
+    }
+
+    @PutMapping("/orderStatusChange/{orderId}")
+    public ResponseEntity<Order> changeOrderStatus(@PathVariable Long orderId, @RequestBody OrderStatusChangeDTO statusChangeDTO) {
+        Order updatedOrder = orderService.changeOrderStatus(orderId, statusChangeDTO.getNewStatus(), statusChangeDTO.getCustomerId());
+        return new ResponseEntity<>(updatedOrder, HttpStatus.OK);
+    }
+
 
     // админ
     @GetMapping("/revenue")
     public ResponseEntity<BigDecimal> getTotalRevenue(
             @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
             @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+
+        if (startDate.isAfter(endDate)) {
+            return ResponseEntity.badRequest().build();
+        }
+
         BigDecimal totalRevenue = orderService.calculateTotalRevenue(startDate, endDate);
-        return new ResponseEntity<BigDecimal>(totalRevenue, HttpStatus.OK);
+        return ResponseEntity.ok(totalRevenue);
     }
 
 }
