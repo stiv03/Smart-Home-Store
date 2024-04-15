@@ -153,7 +153,7 @@ public class OrderService {
     // админ
     public BigDecimal calculateTotalRevenue(LocalDateTime startDate, LocalDateTime endDate) {
         Query query = entityManager.createQuery(
-                "SELECT COALESCE(SUM(o.value), 0) FROM Order o WHERE o.change_datetime >= :startDate AND o.change_datetime <= :endDate AND o.status = :status",
+                "SELECT COALESCE(SUM(o.value), 0) FROM Order o WHERE o.ChangeDateTime >= :startDate AND o.ChangeDateTime <= :endDate AND o.status = :status",
                 BigDecimal.class
         );
         query.setParameter("startDate", startDate);
