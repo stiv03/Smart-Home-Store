@@ -19,6 +19,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.Optional;
+
 @Service
 public class AuthService {
 
@@ -55,7 +57,7 @@ public class AuthService {
         }
         newUser.setPhoto("https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg");
         userRepository.save(newUser);
-        var token = jwtGenerator.generateToken(newUser);
+        var token = jwtGenerator.generateToken(newUser, newUser.getUserType());
         return new ResponseEntity<>(new AuthResponseDTO(token), HttpStatus.OK);
     }
 
@@ -64,8 +66,10 @@ public class AuthService {
             Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDTO.getUsername(),
                         loginDTO.getPassword()));
+            UserAccount user = userRepository.findByUsername(loginDTO.getUsername());
+            UserType userType = user.getUserType();
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            String token = jwtGenerator.generateToken(authentication);
+            String token = jwtGenerator.generateToken(authentication, userType);
             return new ResponseEntity<>(new AuthResponseDTO(token), HttpStatus.OK);
         } catch (AuthenticationException authEx) {
             authEx.printStackTrace();
