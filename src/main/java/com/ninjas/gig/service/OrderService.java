@@ -84,6 +84,9 @@ public class OrderService {
         return order;
     }
 
+    public List<Order> getAllByClient(UserAccount client) {
+        return orderRepository.findByClient(client);
+    }
 
 
     // служител
@@ -91,9 +94,6 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
-    public List<OrderProduct> getAllOrderProductsByOrderId(Long orderId) {
-        return orderProductRepository.findByOrderId(orderId);
-    }
 
     @Transactional
     public List<OrderProductDetailsDTO> getOrderProductsDetails(Long orderId) {
