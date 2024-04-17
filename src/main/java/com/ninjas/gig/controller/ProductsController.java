@@ -1,5 +1,7 @@
 package com.ninjas.gig.controller;
 
+import com.ninjas.gig.dto.UpdatePriceRequestDTO;
+import com.ninjas.gig.dto.UpdateQuantityRequestDTO;
 import com.ninjas.gig.service.ProductService;
 import com.ninjas.gig.entity.Product;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -100,7 +103,7 @@ public class ProductsController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/deletedProducts")
-    public ResponseEntity<List<Product>> displayDeletedProducts() {
+    public ResponseEntity<List<Product>> getDeletedProducts() {
         List<Product> products = productService.findDeletedProducts();
         return ResponseEntity.ok().body(products);
     }
@@ -111,4 +114,24 @@ public class ProductsController {
         productService.returnProduct(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PutMapping("/updatePrice/{id}")
+    public ResponseEntity<Product> updatePrice(@PathVariable Long id, @RequestBody UpdatePriceRequestDTO updatePriceRequest) {
+        var updatedProduct = productService.updateProductCurrentAndMinimalPrice(id, updatePriceRequest);
+        return ResponseEntity.ok(updatedProduct);
+    }
+
+    //@PreAuthorize("hasAuthority('ADMIN')")
+    @PutMapping("/updateQuantity/{id}")
+    public ResponseEntity<Product> updateQuantity(@PathVariable Long id, @RequestBody UpdateQuantityRequestDTO updateQuantity) {
+        var updatedProduct = productService.updateProductQuantity(id, updateQuantity);
+        return ResponseEntity.ok(updatedProduct);
+    }
+
+//    @PutMapping("/products/{id}/price")
+//    public Product updateProductName(@PathVariable Long id, @RequestParam String name) {
+//        return productService.updateProductName(id, name);
+//    }
+
 }
