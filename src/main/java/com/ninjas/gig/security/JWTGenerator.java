@@ -31,7 +31,7 @@ public class JWTGenerator {
                 .signWith(SignatureAlgorithm.HS256, getSignKey())
                 .compact();
     }
-    public String generateToken(Authentication authentication, UserType userType){
+    public String generateToken(Authentication authentication, UserType userType, Long userId){
         String username = authentication.getName();
         Date currentDate = new Date(System.currentTimeMillis());
         Date expireDate = new Date(currentDate.getTime() + SecurityConstants.JWT_EXPIRATION);
@@ -40,6 +40,7 @@ public class JWTGenerator {
                 .claim("userType", userType)
                 .setSubject(username)
                 .setIssuedAt(currentDate)
+                .setId(String.valueOf(userId))
                 .setExpiration(expireDate)
                 .signWith(SignatureAlgorithm.HS256, getSignKey())
                 .compact();
