@@ -4,12 +4,10 @@ import com.ninjas.gig.dto.OrderProductDetailsDTO;
 import com.ninjas.gig.dto.OrderRequestDTO;
 import com.ninjas.gig.dto.OrderStatusChangeDTO;
 import com.ninjas.gig.dto.StatisticsRequestDTO;
-import com.ninjas.gig.entity.Order;
-import com.ninjas.gig.entity.OrderProduct;
-import com.ninjas.gig.entity.OrderStatusType;
-import com.ninjas.gig.entity.Product;
+import com.ninjas.gig.entity.*;
 import com.ninjas.gig.service.OrderService;
 import com.ninjas.gig.service.ProductService;
+import com.ninjas.gig.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -28,6 +26,9 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private UserService userService;
+
     // клиент
     @PreAuthorize("hasAuthority('CUSTOMER')")
     @PostMapping("/createOrder")
@@ -36,25 +37,27 @@ public class OrderController {
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasAuthority('CUSTOMER')")
+    @GetMapping("/clientOrder/{clientId}")
+    public ResponseEntity<List<Order>> getOrdersByClientId(@PathVariable Long clientId) {
+        UserAccount client = userService.getUserById(clientId);
+        List<Order> orders = orderService.getAllByClient(client);
+        if (orders.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(orders, HttpStatus.OK);
+    }
+
+
     // служител
     @PreAuthorize("hasAnyAuthority('EMPLOYEE','ADMIN')")
     @GetMapping("/orders")
-    public ResponseEntity<List<Order>> displayAllProducts() {
+    public ResponseEntity<List<Order>> displayAllOrders() {
         List<Order> orders = orderService.getAll();
         return ResponseEntity.ok().body(orders);
     }
-    @PreAuthorize("hasAnyAuthority('EMPLOYEE','ADMIN')")
-    @GetMapping("/orders/{orderId}")
-    public ResponseEntity<List<OrderProduct>> getOrderProductsByOrderId(@PathVariable Long orderId) {
-        List<OrderProduct> orderProducts = orderService.getAllOrderProductsByOrderId(orderId);
 
-        if (orderProducts == null || orderProducts.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        return new ResponseEntity<>(orderProducts, HttpStatus.OK);
-    }
-    @PreAuthorize("hasAnyAuthority('EMPLOYEE','ADMIN')")
+    @PreAuthorize("hasAnyAuthority('CUSTOMER','EMPLOYEE','ADMIN')")
     @GetMapping("/order/{orderId}")
     public ResponseEntity<List<OrderProductDetailsDTO>> getOrderProductsDetails(@PathVariable Long orderId) {
         List<OrderProductDetailsDTO> orderProductsDetails = orderService.getOrderProductsDetails(orderId);
