@@ -68,8 +68,9 @@ public class AuthService {
                         loginDTO.getPassword()));
             UserAccount user = userRepository.findByUsername(loginDTO.getUsername());
             UserType userType = user.getUserType();
+            Long userId = user.getId();
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            String token = jwtGenerator.generateToken(authentication, userType);
+            String token = jwtGenerator.generateToken(authentication, userType, userId);
             return new ResponseEntity<>(new AuthResponseDTO(token), HttpStatus.OK);
         } catch (AuthenticationException authEx) {
             authEx.printStackTrace();
