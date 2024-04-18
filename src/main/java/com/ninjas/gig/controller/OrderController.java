@@ -66,7 +66,7 @@ public class OrderController {
     @PreAuthorize("hasAnyAuthority('EMPLOYEE','ADMIN')")
     @PutMapping("/orderStatusChange/{orderId}")
     public ResponseEntity<Order> changeOrderStatus(@PathVariable Long orderId, @RequestBody OrderStatusChangeDTO statusChangeDTO) {
-        Order updatedOrder = orderService.changeOrderStatus(orderId, statusChangeDTO.getNewStatus(), statusChangeDTO.getCustomerId());
+        Order updatedOrder = orderService.changeOrderStatus(orderId, statusChangeDTO.getNewStatus(), statusChangeDTO.getEmployeeId());
         return new ResponseEntity<>(updatedOrder, HttpStatus.OK);
     }
 

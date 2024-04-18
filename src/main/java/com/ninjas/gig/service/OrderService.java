@@ -112,12 +112,12 @@ public class OrderService {
         return orderProductDetailsDTOList;
     }
     @Transactional
-    public Order changeOrderStatus(Long orderId, OrderStatusType newStatus, Long customerId) {
+    public Order changeOrderStatus(Long orderId, OrderStatusType newStatus, Long employeeId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new IllegalArgumentException("Order not found: " + orderId));
 
-        UserAccount customer = userService.getUserById(customerId);
-        order.setCustomer(customer);
+        UserAccount employee = userService.getUserById(employeeId);
+        order.setEmployee(employee);
 
         switch (newStatus) {
             case PENDING:
