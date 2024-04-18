@@ -1,16 +1,14 @@
 package com.ninjas.gig.controller;
 
-import com.ninjas.gig.dto.OrderProductDetailsDTO;
+import com.ninjas.gig.dto.OrderProductDetailsResponseDTO;
 import com.ninjas.gig.dto.OrderRequestDTO;
 import com.ninjas.gig.dto.OrderStatusChangeDTO;
 import com.ninjas.gig.dto.StatisticsRequestDTO;
 import com.ninjas.gig.entity.*;
 import com.ninjas.gig.service.OrderService;
-import com.ninjas.gig.service.ProductService;
 import com.ninjas.gig.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -59,8 +57,8 @@ public class OrderController {
 
     @PreAuthorize("hasAnyAuthority('CUSTOMER','EMPLOYEE','ADMIN')")
     @GetMapping("/order/{orderId}")
-    public ResponseEntity<List<OrderProductDetailsDTO>> getOrderProductsDetails(@PathVariable Long orderId) {
-        List<OrderProductDetailsDTO> orderProductsDetails = orderService.getOrderProductsDetails(orderId);
+    public ResponseEntity<List<OrderProductDetailsResponseDTO>> getOrderProductsDetails(@PathVariable Long orderId) {
+        List<OrderProductDetailsResponseDTO> orderProductsDetails = orderService.getOrderProductsDetails(orderId);
         return ResponseEntity.ok(orderProductsDetails);
     }
     @PreAuthorize("hasAnyAuthority('EMPLOYEE','ADMIN')")

@@ -1,5 +1,7 @@
 package com.ninjas.gig.service;
 
+import com.ninjas.gig.dto.UpdatePriceRequestDTO;
+import com.ninjas.gig.dto.UpdateQuantityRequestDTO;
 import com.ninjas.gig.entity.Product;
 import com.ninjas.gig.repository.ProductsRepository;
 
@@ -12,6 +14,13 @@ import com.ninjas.gig.exception.ResourceNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+//    public Product updateProductName(Long id, String name) {
+//        Product product = productRepository.findById(id)
+//                .orElseThrow(() -> new RuntimeException("Product not found!"));
+//        product.setName(name);
+//        return productRepository.save(product);
+//    }
 
 
 import java.math.BigDecimal;
@@ -246,5 +255,22 @@ public class ProductService {
         product.setDeleted(false);
 
         productRepository.save(product);
+    }
+    public Product updateProductCurrentAndMinimalPrice(final Long id, final UpdatePriceRequestDTO productChanges) {
+        var product = productRepository
+                .findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
+        product.setCurrentPrice(productChanges.newPrice());
+        product.setMinPrice(productChanges.newMinimalPrice());
+        product.setDiscount(0);
+        return productRepository.save(product);
+    }
+
+    public Product updateProductQuantity(final Long id, final UpdateQuantityRequestDTO updateQuantity) {
+        var product = productRepository
+                .findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
+        product.setQuantity(updateQuantity.newQuantity());
+        return productRepository.save(product);
     }
 }
