@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 public class OrderStatusChangeDTO {
     private OrderStatusType newStatus;
-    private Long customerId;
+    private Long employeeId;
 }
