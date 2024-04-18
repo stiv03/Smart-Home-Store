@@ -96,9 +96,12 @@ public class ProductsController {
     }
 
     @PreAuthorize("hasAnyAuthority('EMPLOYEE','ADMIN')")
-    @PostMapping("/set-promotions/")
+    @PostMapping("/set-promotion-campaign")
     public ResponseEntity<String> setPromotionalCampaign(@RequestBody PromotionRequestDTO promotionRequest) {
-        productService.promotionCampaign(promotionRequest.getProducts(), promotionRequest.getPromotionPercent(), promotionRequest.getStartDate(), promotionRequest.getEndDate());
+        productService.promotionCampaign(promotionRequest.getProducts(),
+                promotionRequest.getPromotionPercent(),
+                promotionRequest.getStartDate(),
+                promotionRequest.getEndDate());
         return ResponseEntity.ok("Promotional campaign started successfully!");
     }
 
