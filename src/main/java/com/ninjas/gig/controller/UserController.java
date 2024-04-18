@@ -20,6 +20,7 @@ public class UserController {
     private UserService userService;
 
     // клиент
+    @PreAuthorize("hasAnyAuthority('CUSTOMER','EMPLOYEE','ADMIN')")
     @GetMapping("/user/{userId}")
     public ResponseEntity<UserInfoDto> getUserDetails(@PathVariable Long userId) {
         UserInfoDto userDTO = userService.getUserDetails(userId);
@@ -30,6 +31,7 @@ public class UserController {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('CUSTOMER','EMPLOYEE','ADMIN')")
     @PutMapping("/users/change-photo/{userId}")
     public ResponseEntity<String> changeUserPhoto(@PathVariable Long userId, @RequestBody String newPhotoUrl) {
         String cleanPhotoUrl = newPhotoUrl.replaceAll("\"", "");

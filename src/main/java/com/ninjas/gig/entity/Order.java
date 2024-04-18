@@ -40,8 +40,8 @@ public class Order {
     private OrderStatusType status;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "customer_id")
-    private UserAccount customer;
+    @JoinColumn(name = "employee_id")
+    private UserAccount employee;
 
     @Column(name = "change_datetime")
     private LocalDateTime ChangeDateTime;
