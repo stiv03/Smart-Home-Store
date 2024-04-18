@@ -1,6 +1,7 @@
 package com.ninjas.gig.service;
 
 import com.ninjas.gig.dto.AuthResponseDTO;
+import com.ninjas.gig.dto.UserInfoDto;
 import com.ninjas.gig.dto.UserLoginDTO;
 import com.ninjas.gig.dto.UserRegisterDTO;
 import com.ninjas.gig.entity.UserAccount;
@@ -57,8 +58,15 @@ public class AuthService {
         }
         newUser.setPhoto("https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg");
         userRepository.save(newUser);
+        UserInfoDto userDTO = new UserInfoDto();
+        userDTO.setId(newUser.getId());
+        userDTO.setPhoto(newUser.getPhoto());
+        userDTO.setName(newUser.getName());
+        userDTO.setEmail(newUser.getEmail());
+        userDTO.setUsername(newUser.getUsername());
+        userDTO.setUserType(newUser.getUserType());
         var token = jwtGenerator.generateToken(newUser, newUser.getUserType());
-        return new ResponseEntity<>(new AuthResponseDTO(token), HttpStatus.OK);
+        return new ResponseEntity<>(new AuthResponseDTO(token, userDTO), HttpStatus.OK);
     }
 
     public ResponseEntity<?> loginUser(@RequestBody UserLoginDTO loginDTO){
@@ -68,9 +76,17 @@ public class AuthService {
                         loginDTO.getPassword()));
             UserAccount user = userRepository.findByUsername(loginDTO.getUsername());
             UserType userType = user.getUserType();
+            Long userId = user.getId();
+            UserInfoDto userDTO = new UserInfoDto();
+            userDTO.setId(user.getId());
+            userDTO.setPhoto(user.getPhoto());
+            userDTO.setName(user.getName());
+            userDTO.setEmail(user.getEmail());
+            userDTO.setUsername(user.getUsername());
+            userDTO.setUserType(user.getUserType());
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            String token = jwtGenerator.generateToken(authentication, userType);
-            return new ResponseEntity<>(new AuthResponseDTO(token), HttpStatus.OK);
+            String token = jwtGenerator.generateToken(authentication, userType, userId);
+            return new ResponseEntity<>(new AuthResponseDTO(token, userDTO), HttpStatus.OK);
         } catch (AuthenticationException authEx) {
             authEx.printStackTrace();
             return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);

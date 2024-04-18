@@ -1,6 +1,6 @@
 package com.ninjas.gig.service;
 
-import com.ninjas.gig.dto.OrderProductDetailsDTO;
+import com.ninjas.gig.dto.OrderProductDetailsResponseDTO;
 import com.ninjas.gig.dto.OrderRequestDTO;
 import com.ninjas.gig.entity.*;
 import com.ninjas.gig.repository.OrderProductRepository;
@@ -9,7 +9,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
-import jakarta.websocket.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -84,6 +83,9 @@ public class OrderService {
         return order;
     }
 
+    public List<Order> getAllByClient(UserAccount client) {
+        return orderRepository.findByClient(client);
+    }
 
 
     // служител
@@ -91,17 +93,14 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
-    public List<OrderProduct> getAllOrderProductsByOrderId(Long orderId) {
-        return orderProductRepository.findByOrderId(orderId);
-    }
 
     @Transactional
-    public List<OrderProductDetailsDTO> getOrderProductsDetails(Long orderId) {
+    public List<OrderProductDetailsResponseDTO> getOrderProductsDetails(Long orderId) {
         List<OrderProduct> orderProducts = orderProductRepository.findByOrderId(orderId);
-        List<OrderProductDetailsDTO> orderProductDetailsDTOList = new ArrayList<>();
+        List<OrderProductDetailsResponseDTO> orderProductDetailsDTOList = new ArrayList<>();
 
         for (OrderProduct orderProduct : orderProducts) {
-            OrderProductDetailsDTO orderProductDetailsDTO = new OrderProductDetailsDTO();
+            OrderProductDetailsResponseDTO orderProductDetailsDTO = new OrderProductDetailsResponseDTO();
             orderProductDetailsDTO.setProductId(orderProduct.getProduct().getId());
             orderProductDetailsDTO.setProductName(orderProduct.getProduct().getName());
             orderProductDetailsDTO.setQuantity(Math.toIntExact(orderProduct.getQuantity()));
@@ -112,12 +111,12 @@ public class OrderService {
         return orderProductDetailsDTOList;
     }
     @Transactional
-    public Order changeOrderStatus(Long orderId, OrderStatusType newStatus, Long customerId) {
+    public Order changeOrderStatus(Long orderId, OrderStatusType newStatus, Long employeeId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new IllegalArgumentException("Order not found: " + orderId));
 
-        UserAccount customer = userService.getUserById(customerId);
-        order.setCustomer(customer);
+        UserAccount employee = userService.getUserById(employeeId);
+        order.setEmployee(employee);
 
         switch (newStatus) {
             case PENDING:
