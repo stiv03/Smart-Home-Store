@@ -20,7 +20,7 @@ public class UserController {
     private UserService userService;
 
     // клиент
-    @PreAuthorize("hasAnyAuthority('CUSTOMER','EMPLOYEE','ADMIN')")
+
     @GetMapping("/user/{userId}")
     public ResponseEntity<UserInfoDto> getUserDetails(@PathVariable Long userId) {
         UserInfoDto userDTO = userService.getUserDetails(userId);
