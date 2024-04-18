@@ -13,6 +13,7 @@ import com.ninjas.gig.exception.ResourceNotFoundException;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -203,14 +204,16 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    public void promotionCampaign(List<Product> products, int promotionPercent, LocalDate startDate, LocalDate endDate) {
+    public void promotionCampaign(List<Product> products,
+                                  int promotionPercent,
+                                  LocalDate startDate,
+                                  LocalDate endDate) {
         LocalDate currentDate = LocalDate.now();
         if (currentDate.isAfter(startDate) && currentDate.isBefore(endDate)) {
             for (Product product : products) {
                 promotionSet(product.getId(), promotionPercent);
             }
-        }
-        if(currentDate.isAfter(endDate)){
+        } else if (currentDate.isAfter(endDate)) {
             for (Product productss : products) {
                 productss.setDiscount(0);
                 productRepository.save(productss);
