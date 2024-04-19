@@ -106,28 +106,28 @@ public class ProductsController {
     }
 
     // админ
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/productDelete/{id}")
+//    @PreAuthorize("hasAuthority('ADMIN')")
+    @DeleteMapping("/productDelete/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     @GetMapping("/deletedProducts")
     public ResponseEntity<List<Product>> getDeletedProducts() {
         List<Product> products = productService.findDeletedProducts();
         return ResponseEntity.ok().body(products);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     @PostMapping("/productReturn/{id}")
     public ResponseEntity<Void> returnProduct(@PathVariable Long id) {
         productService.returnProduct(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     @PutMapping("/updatePrice/{id}")
     public ResponseEntity<Product> updatePrice(@PathVariable Long id, @RequestBody UpdatePriceRequestDTO updatePriceRequest) {
         var updatedProduct = productService.updateProductCurrentAndMinimalPrice(id, updatePriceRequest);
