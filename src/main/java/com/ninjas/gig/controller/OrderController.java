@@ -70,7 +70,7 @@ public class OrderController {
 
     // админ
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/revenue")
+    @PostMapping("/revenue")
     public ResponseEntity<BigDecimal> getTotalRevenue(@Valid @RequestBody StatisticsRequestDTO request) {
 
         LocalDateTime startDate = request.getStartDate();
