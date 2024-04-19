@@ -13,6 +13,8 @@ import com.ninjas.gig.exception.ResourceNotFoundException;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 //    public Product updateProductName(Long id, String name) {
@@ -26,6 +28,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -199,6 +202,23 @@ public class ProductService {
         product.setDescription(productChanges.getDescription());
 
         return productRepository.save(product);
+    }
+
+    public void promotionCampaign(List<Product> products,
+                                  int promotionPercent,
+                                  LocalDate startDate,
+                                  LocalDate endDate) {
+        LocalDate currentDate = LocalDate.now();
+        if (currentDate.isAfter(startDate) && currentDate.isBefore(endDate)) {
+            for (Product product : products) {
+                promotionSet(product.getId(), promotionPercent);
+            }
+        } else if (currentDate.isAfter(endDate)) {
+            for (Product productss : products) {
+                productss.setDiscount(0);
+                productRepository.save(productss);
+            }
+        }
     }
 
     public void promotionSet(Long id, int newDiscount) {

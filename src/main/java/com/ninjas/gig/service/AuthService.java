@@ -58,13 +58,7 @@ public class AuthService {
         }
         newUser.setPhoto("https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg");
         userRepository.save(newUser);
-        UserInfoDto userDTO = new UserInfoDto();
-        userDTO.setId(newUser.getId());
-        userDTO.setPhoto(newUser.getPhoto());
-        userDTO.setName(newUser.getName());
-        userDTO.setEmail(newUser.getEmail());
-        userDTO.setUsername(newUser.getUsername());
-        userDTO.setUserType(newUser.getUserType());
+        UserInfoDto userDTO = getUserInfoDto(newUser);
         var token = jwtGenerator.generateToken(newUser, newUser.getUserType());
         return new ResponseEntity<>(new AuthResponseDTO(token, userDTO), HttpStatus.OK);
     }
@@ -77,13 +71,7 @@ public class AuthService {
             UserAccount user = userRepository.findByUsername(loginDTO.getUsername());
             UserType userType = user.getUserType();
             Long userId = user.getId();
-            UserInfoDto userDTO = new UserInfoDto();
-            userDTO.setId(user.getId());
-            userDTO.setPhoto(user.getPhoto());
-            userDTO.setName(user.getName());
-            userDTO.setEmail(user.getEmail());
-            userDTO.setUsername(user.getUsername());
-            userDTO.setUserType(user.getUserType());
+            UserInfoDto userDTO = getUserInfoDto(user);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String token = jwtGenerator.generateToken(authentication, userType, userId);
             return new ResponseEntity<>(new AuthResponseDTO(token, userDTO), HttpStatus.OK);
@@ -94,5 +82,16 @@ public class AuthService {
             e.printStackTrace();
             return new ResponseEntity<>("Something went wrong", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    private UserInfoDto getUserInfoDto(UserAccount user) {
+        UserInfoDto userDTO = new UserInfoDto();
+        userDTO.setId(user.getId());
+        userDTO.setPhoto(user.getPhoto());
+        userDTO.setName(user.getName());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setUsername(user.getUsername());
+        userDTO.setUserType(user.getUserType());
+        return userDTO;
     }
 }

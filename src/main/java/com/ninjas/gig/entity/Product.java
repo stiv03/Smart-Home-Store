@@ -1,14 +1,20 @@
 package com.ninjas.gig.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Formula;
 
 import java.math.BigDecimal;
 
 @Data
 @Entity
+@Builder
 @Table(name = "Products")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Product {
 
 

@@ -1,5 +1,6 @@
 package com.ninjas.gig.controller;
 
+import com.ninjas.gig.dto.PromotionRequestDTO;
 import com.ninjas.gig.dto.UpdatePriceRequestDTO;
 import com.ninjas.gig.dto.UpdateQuantityRequestDTO;
 import com.ninjas.gig.service.ProductService;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -91,6 +93,16 @@ public class ProductsController {
     public ResponseEntity<String> setDiscount(@PathVariable Long id, @RequestBody int newDiscount) {
         productService.promotionSet(id, newDiscount);
         return ResponseEntity.ok("Discount set successfully");
+    }
+
+    @PreAuthorize("hasAnyAuthority('EMPLOYEE','ADMIN')")
+    @PostMapping("/set-promotion-campaign")
+    public ResponseEntity<String> setPromotionalCampaign(@RequestBody PromotionRequestDTO promotionRequest) {
+        productService.promotionCampaign(promotionRequest.getProducts(),
+                promotionRequest.getPromotionPercent(),
+                promotionRequest.getStartDate(),
+                promotionRequest.getEndDate());
+        return ResponseEntity.ok("Promotional campaign started successfully!");
     }
 
     // админ
