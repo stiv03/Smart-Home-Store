@@ -44,7 +44,6 @@ public class OrderService {
         String phoneNumber = orderRequestDTO.getPhoneNumber();
         Map<Long, Integer> productIdQuantityMap = orderRequestDTO.getProductIdQuantityMap();
 
-
         Order order = new Order();
         order.setAddress(address);
         order.setPhoneNumber(phoneNumber);
@@ -87,12 +86,10 @@ public class OrderService {
         return orderRepository.findByClient(client);
     }
 
-
     // служител
     public List<Order> getAll() {
         return orderRepository.findAll();
     }
-
 
     @Transactional
     public List<OrderProductDetailsResponseDTO> getOrderProductsDetails(Long orderId) {
@@ -110,6 +107,7 @@ public class OrderService {
 
         return orderProductDetailsDTOList;
     }
+
     @Transactional
     public Order changeOrderStatus(Long orderId, OrderStatusType newStatus, Long employeeId) {
         Order order = orderRepository.findById(orderId)
@@ -160,5 +158,4 @@ public class OrderService {
         query.setParameter("status", OrderStatusType.COMPLETED);
         return (BigDecimal) query.getSingleResult();
     }
-
 }

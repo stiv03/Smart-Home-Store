@@ -13,26 +13,12 @@ import com.ninjas.gig.exception.ResourceNotFoundException;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-
-//    public Product updateProductName(Long id, String name) {
-//        Product product = productRepository.findById(id)
-//                .orElseThrow(() -> new RuntimeException("Product not found!"));
-//        product.setName(name);
-//        return productRepository.save(product);
-//    }
-
-
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.apache.commons.text.similarity.LevenshteinDistance;
 
@@ -42,6 +28,7 @@ public class ProductService {
     private ProductsRepository productRepository;
     @PersistenceContext
     private EntityManager entityManager;
+
     // методи за OrderService
     @Transactional
     public Product getProductById(Long productId) {
@@ -67,8 +54,6 @@ public class ProductService {
     }
 
     // клиент
-
-
     public List<Product> findAllAvailableProducts() {
         Query query = entityManager.createQuery(
                 "SELECT p FROM Product p WHERE p.isDeleted = false AND p.quantity > 0",
@@ -147,9 +132,8 @@ public class ProductService {
         return similarProducts;
     }
 
-
     // служител
-    public Product addProduct(Product product){
+    public Product addProduct(Product product) {
         if (product.getDiscount() == 0) {
             product.setDiscount(0);
         }
@@ -241,14 +225,12 @@ public class ProductService {
         productRepository.save(product);
     }
 
-
     // админ
     public void deleteProduct(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Product not found with id: " + id));
 
         product.setDeleted(true);
-
         productRepository.save(product);
     }
 
@@ -273,9 +255,9 @@ public class ProductService {
                 .orElseThrow(() -> new IllegalArgumentException("Product not found with id: " + id));
 
         product.setDeleted(false);
-
         productRepository.save(product);
     }
+
     public Product updateProductCurrentAndMinimalPrice(final Long id, final UpdatePriceRequestDTO productChanges) {
         var product = productRepository
                 .findById(id)
