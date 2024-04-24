@@ -1,6 +1,5 @@
 package com.ninjas.gig.security;
 
-import com.ninjas.gig.entity.UserAccount;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
